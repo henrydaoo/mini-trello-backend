@@ -8,7 +8,7 @@ import com.minitrello.entity.User;
 import com.minitrello.exception.UserAlreadyExistsException;
 import com.minitrello.repository.UserRepository;
 import com.minitrello.security.JwtService;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
