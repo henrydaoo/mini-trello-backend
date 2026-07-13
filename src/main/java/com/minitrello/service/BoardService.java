@@ -7,10 +7,7 @@ import com.minitrello.dto.BoardResponse;
 import com.minitrello.entity.Board;
 import com.minitrello.entity.BoardMember;
 import com.minitrello.entity.User;
-import com.minitrello.exception.BoardNotFoundException;
-import com.minitrello.exception.ForbiddenOperationException;
-import com.minitrello.exception.MemberAlreadyExistsException;
-import com.minitrello.exception.UserNotFoundException;
+import com.minitrello.exception.*;
 import com.minitrello.repository.BoardMemberRepository;
 import com.minitrello.repository.BoardRepository;
 import com.minitrello.repository.UserRepository;
@@ -98,6 +95,18 @@ public class BoardService {
         board.getMembers().add(member);
 
         return toResponse(board);
+    }
+
+    public void removeMember(String username, Long boardId, Long userId) {
+        Board board = getBoardOrThrow(boardId);
+        User currentUser = getUserByUsername(username);
+        assertIsOwner(board, currentUser);
+
+        boardMemberRepository.findByBoardIdAndUserId(boardId, userId)
+                .orElseThrow(() -> new BoardMemberNotFoundException(
+                        "User " + userId + " is not a member of board " + boardId));
+
+        boardMemberRepository.deleteByBoardIdAndUserId(boardId, userId);
     }
 
     private User getUserByUsername(String username) {
