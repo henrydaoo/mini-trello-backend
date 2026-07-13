@@ -24,10 +24,11 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final BoardMemberRepository boardMemberRepository;
     private final UserRepository userRepository;
+    private final BoardAccessService boardAccessService;
 
     @Transactional(readOnly = true)
     public List<BoardResponse> getBoardsForCurrentUser(String username) {
-        User currentUser = getUserByUsername(username);
+        User currentUser = boardAccessService.getUserByUsername(username);
         return boardRepository.findAllAccessibleByUser(currentUser.getId())
                 .stream()
                 .map(this::toResponse)
@@ -35,7 +36,7 @@ public class BoardService {
     }
 
     public BoardResponse createBoard(String username, BoardRequest request) {
-        User owner = getUserByUsername(username);
+        User owner = boardAccessService.getUserByUsername(username);
 
         Board board = Board.builder()
                 .name(request.getName())
@@ -48,16 +49,16 @@ public class BoardService {
 
     @Transactional(readOnly = true)
     public BoardResponse getBoardById(String username, Long boardId) {
-        Board board = getBoardOrThrow(boardId);
-        User currentUser = getUserByUsername(username);
-        assertHasAccess(board, currentUser);
+        Board board = boardAccessService.getBoardOrThrow(boardId);
+        User currentUser = boardAccessService.getUserByUsername(username);
+        boardAccessService.assertHasAccess(board, currentUser);
         return toResponse(board);
     }
 
     public BoardResponse updateBoard(String username, Long boardId, BoardRequest request) {
-        Board board = getBoardOrThrow(boardId);
-        User currentUser = getUserByUsername(username);
-        assertIsOwner(board, currentUser);
+        Board board = boardAccessService.getBoardOrThrow(boardId);
+        User currentUser = boardAccessService.getUserByUsername(username);
+        boardAccessService.assertIsOwner(board, currentUser);
 
         board.setName(request.getName());
         board.setDescription(request.getDescription());
@@ -66,16 +67,16 @@ public class BoardService {
     }
 
     public void deleteBoard(String username, Long boardId) {
-        Board board = getBoardOrThrow(boardId);
-        User currentUser = getUserByUsername(username);
-        assertIsOwner(board, currentUser);
+        Board board = boardAccessService.getBoardOrThrow(boardId);
+        User currentUser = boardAccessService.getUserByUsername(username);
+        boardAccessService.assertIsOwner(board, currentUser);
         boardRepository.delete(board);
     }
 
     public BoardResponse addMember(String username, Long boardId, AddMemberRequest request) {
-        Board board = getBoardOrThrow(boardId);
-        User currentUser = getUserByUsername(username);
-        assertIsOwner(board, currentUser);
+        Board board = boardAccessService.getBoardOrThrow(boardId);
+        User currentUser = boardAccessService.getUserByUsername(username);
+        boardAccessService.assertIsOwner(board, currentUser);
 
         User newMember = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UserNotFoundException("No user found with email " + request.getEmail()));
@@ -98,9 +99,9 @@ public class BoardService {
     }
 
     public void removeMember(String username, Long boardId, Long userId) {
-        Board board = getBoardOrThrow(boardId);
-        User currentUser = getUserByUsername(username);
-        assertIsOwner(board, currentUser);
+        Board board = boardAccessService.getBoardOrThrow(boardId);
+        User currentUser = boardAccessService.getUserByUsername(username);
+        boardAccessService.assertIsOwner(board, currentUser);
 
         boardMemberRepository.findByBoardIdAndUserId(boardId, userId)
                 .orElseThrow(() -> new BoardMemberNotFoundException(
@@ -108,12 +109,6 @@ public class BoardService {
 
         boardMemberRepository.deleteByBoardIdAndUserId(boardId, userId);
     }
-
-    private User getUserByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("User not found: " + username));
-    }
-
 
     private BoardResponse toResponse(Board board) {
         List<BoardMemberResponse> members = board.getMembers().stream()
@@ -134,24 +129,5 @@ public class BoardService {
                 .createdAt(board.getCreatedAt())
                 .updatedAt(board.getUpdatedAt())
                 .build();
-    }
-
-    private Board getBoardOrThrow(Long boardId) {
-        return boardRepository.findById(boardId)
-                .orElseThrow(() -> new BoardNotFoundException("Board not found with id " + boardId));
-    }
-
-    private void assertHasAccess(Board board, User user) {
-        boolean isOwner = board.getOwner().getId().equals(user.getId());
-        boolean isMember = boardMemberRepository.existsByBoardIdAndUserId(board.getId(), user.getId());
-        if (!isOwner && !isMember) {
-            throw new ForbiddenOperationException("You do not have access to this board");
-        }
-    }
-
-    private void assertIsOwner(Board board, User user) {
-        if (!board.getOwner().getId().equals(user.getId())) {
-            throw new ForbiddenOperationException("Only the board owner can perform this action");
-        }
     }
 }
