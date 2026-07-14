@@ -10,5 +10,5 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TaskAssigneeRequest {
-    private Long assigneeId;
+  private Long assigneeId;
 }

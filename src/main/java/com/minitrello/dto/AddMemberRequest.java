@@ -12,7 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddMemberRequest {
-    @NotBlank(message = "Email is required")
-    @Email(message = "Email must be valid")
-    private String email;
+  @NotBlank(message = "Email is required")
+  @Email(message = "Email must be valid")
+  private String email;
 }

@@ -12,10 +12,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TaskMoveRequest {
-    @NotNull(message = "Target list id is required")
-    private Long targetListId;
+  @NotNull(message = "Target list id is required")
+  private Long targetListId;
 
-    @NotNull(message = "Position is required")
-    @PositiveOrZero(message = "Position must be zero or a positive number")
-    private Integer position;
+  @NotNull(message = "Position is required")
+  @PositiveOrZero(message = "Position must be zero or a positive number")
+  private Integer position;
 }

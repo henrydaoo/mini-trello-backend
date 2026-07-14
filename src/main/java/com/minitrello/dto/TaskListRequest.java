@@ -12,7 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TaskListRequest {
-    @NotBlank(message = "List name is required")
-    @Size(max = 100, message = "List name must be at most 100 characters")
-    private String name;
+  @NotBlank(message = "List name is required")
+  @Size(max = 100, message = "List name must be at most 100 characters")
+  private String name;
 }

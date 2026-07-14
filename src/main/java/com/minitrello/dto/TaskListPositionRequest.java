@@ -12,7 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TaskListPositionRequest {
-    @NotNull(message = "Position is required")
-    @PositiveOrZero(message = "Position must be zero or a positive number")
-    private Integer position;
+  @NotNull(message = "Position is required")
+  @PositiveOrZero(message = "Position must be zero or a positive number")
+  private Integer position;
 }
