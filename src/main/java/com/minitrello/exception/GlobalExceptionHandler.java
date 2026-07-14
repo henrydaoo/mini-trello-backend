@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
   @ExceptionHandler(UserAlreadyExistsException.class)
   public ResponseEntity<ErrorResponse> handleUserAlreadyExists(
       UserAlreadyExistsException ex, HttpServletRequest request) {
@@ -24,6 +25,31 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ErrorResponse> handleInvalidCredentials(
       RuntimeException ex, HttpServletRequest request) {
     return buildResponse(HttpStatus.UNAUTHORIZED, "Invalid username or password", request);
+  }
+
+  @ExceptionHandler({
+    BoardNotFoundException.class,
+    UserNotFoundException.class,
+    BoardMemberNotFoundException.class,
+    TaskListNotFoundException.class,
+    TaskNotFoundException.class,
+    CommentNotFoundException.class
+  })
+  public ResponseEntity<ErrorResponse> handleNotFound(
+      RuntimeException ex, HttpServletRequest request) {
+    return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage(), request);
+  }
+
+  @ExceptionHandler(ForbiddenOperationException.class)
+  public ResponseEntity<ErrorResponse> handleForbidden(
+      ForbiddenOperationException ex, HttpServletRequest request) {
+    return buildResponse(HttpStatus.FORBIDDEN, ex.getMessage(), request);
+  }
+
+  @ExceptionHandler(MemberAlreadyExistsException.class)
+  public ResponseEntity<ErrorResponse> handleMemberAlreadyExists(
+      MemberAlreadyExistsException ex, HttpServletRequest request) {
+    return buildResponse(HttpStatus.CONFLICT, ex.getMessage(), request);
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -41,6 +67,7 @@ public class GlobalExceptionHandler {
     body.put("message", "Request validation failed");
     body.put("path", request.getRequestURI());
     body.put("fieldErrors", fieldErrors);
+
     return ResponseEntity.badRequest().body(body);
   }
 
