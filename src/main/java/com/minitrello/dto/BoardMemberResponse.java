@@ -8,7 +8,7 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 public class BoardMemberResponse {
-    private Long userId;
-    private String username;
-    private String email;
+  private Long userId;
+  private String username;
+  private String email;
 }

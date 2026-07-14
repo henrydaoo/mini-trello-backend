@@ -16,37 +16,39 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class BoardAccessService {
-    private final BoardRepository boardRepository;
-    private final BoardMemberRepository boardMemberRepository;
-    private final UserRepository userRepository;
+  private final BoardRepository boardRepository;
+  private final BoardMemberRepository boardMemberRepository;
+  private final UserRepository userRepository;
 
-    public User getUserByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("User not found: " + username));
-    }
+  public User getUserByUsername(String username) {
+    return userRepository
+        .findByUsername(username)
+        .orElseThrow(() -> new UserNotFoundException("User not found: " + username));
+  }
 
-    public Board getBoardOrThrow(Long boardId) {
-        return boardRepository.findById(boardId)
-                .orElseThrow(() -> new BoardNotFoundException("Board not found with id " + boardId));
-    }
+  public Board getBoardOrThrow(Long boardId) {
+    return boardRepository
+        .findById(boardId)
+        .orElseThrow(() -> new BoardNotFoundException("Board not found with id " + boardId));
+  }
 
-    public boolean isOwner(Board board, User user) {
-        return board.getOwner().getId().equals(user.getId());
-    }
+  public boolean isOwner(Board board, User user) {
+    return board.getOwner().getId().equals(user.getId());
+  }
 
-    public boolean isMember(Board board, User user) {
-        return boardMemberRepository.existsByBoardIdAndUserId(board.getId(), user.getId());
-    }
+  public boolean isMember(Board board, User user) {
+    return boardMemberRepository.existsByBoardIdAndUserId(board.getId(), user.getId());
+  }
 
-    public void assertHasAccess(Board board, User user) {
-        if (!isOwner(board, user) && !isMember(board, user)) {
-            throw new ForbiddenOperationException("You do not have access to this board");
-        }
+  public void assertHasAccess(Board board, User user) {
+    if (!isOwner(board, user) && !isMember(board, user)) {
+      throw new ForbiddenOperationException("You do not have access to this board");
     }
+  }
 
-    public void assertIsOwner(Board board, User user) {
-        if (!isOwner(board, user)) {
-            throw new ForbiddenOperationException("Only the board owner can perform this action");
-        }
+  public void assertIsOwner(Board board, User user) {
+    if (!isOwner(board, user)) {
+      throw new ForbiddenOperationException("Only the board owner can perform this action");
     }
+  }
 }
