@@ -10,7 +10,7 @@ public class NotificationFactory {
   private final EmailNotificationStrategy emailNotificationStrategy;
   private final InAppNotificationStrategy inAppNotificationStrategy;
 
-  public NotificationStrategy getStratery(NotificationPreference preference) {
+  public NotificationStrategy getStrategy(NotificationPreference preference) {
     return switch (preference) {
       case EMAIL -> emailNotificationStrategy;
       case IN_APP -> inAppNotificationStrategy;
