@@ -116,13 +116,6 @@
                 </configuration>
             </plugin>
 
-            <!--
-                Spotless: auto-formats + checks Java code style using Google Java Format.
-                - `mvn spotless:apply`  -> auto-format all files in place
-                - `mvn spotless:check`  -> fails the build if any file is not formatted
-                Bound to the `verify` phase, so `mvn clean install` fails on unformatted
-                code — same discipline a formatter/linter step would enforce in CI.
-            -->
             <plugin>
                 <groupId>com.diffplug.spotless</groupId>
                 <artifactId>spotless-maven-plugin</artifactId>

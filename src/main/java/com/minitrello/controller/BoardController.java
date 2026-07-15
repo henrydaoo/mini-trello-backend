@@ -4,6 +4,7 @@ import com.minitrello.dto.AddMemberRequest;
 import com.minitrello.dto.BoardRequest;
 import com.minitrello.dto.BoardResponse;
 import com.minitrello.service.BoardService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/boards")
 @RequiredArgsConstructor
+@Tag(name = "Board")
 public class BoardController {
+
   private final BoardService boardService;
 
   @GetMapping

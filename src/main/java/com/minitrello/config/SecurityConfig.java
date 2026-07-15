@@ -25,6 +25,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
   private static final String[] PUBLIC_ENDPOINTS = {
     "/api/auth/**", "/api/health", "/swagger-ui/**", "/swagger-ui.html", "/api-docs/**"
   };

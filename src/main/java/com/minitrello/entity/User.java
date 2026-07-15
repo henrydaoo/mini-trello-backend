@@ -2,7 +2,11 @@ package com.minitrello.entity;
 
 import jakarta.persistence.*;
 import java.time.Instant;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(
@@ -17,6 +21,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class User {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;

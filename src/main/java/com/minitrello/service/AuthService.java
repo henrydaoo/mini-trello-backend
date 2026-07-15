@@ -20,11 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
+
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
   private final AuthenticationManager authenticationManager;
-  private final UserDetailsService userDetailsService;
   private final JwtService jwtService;
+  private final UserDetailsService userDetailsService;
 
   @Transactional
   public UserResponse register(RegisterRequest request) {

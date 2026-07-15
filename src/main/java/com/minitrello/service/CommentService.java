@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional
 public class CommentService {
+
   private final CommentRepository commentRepository;
   private final TaskRepository taskRepository;
   private final BoardAccessService boardAccessService;
