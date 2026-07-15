@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class BoardAccessService {
+
   private final BoardRepository boardRepository;
   private final BoardMemberRepository boardMemberRepository;
   private final UserRepository userRepository;

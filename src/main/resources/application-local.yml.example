@@ -1,0 +1,19 @@
+# Copy this file to `application-local.yml` (same folder) and fill in real values.
+# application-local.yml is gitignored — never committed — so each developer's local
+# secrets/overrides stay on their own machine, the same role .env.local plays in the
+# frontend repo.
+#
+# Activate it by running with the "local" profile active, e.g.:
+#   ./mvnw spring-boot:run -Dspring-boot.run.profiles=local
+# or in IntelliJ: Run Configuration -> Active profiles: local
+
+jwt:
+  secret: change-this-to-any-random-string-at-least-32-characters-long
+
+# Uncomment and override only what's different on your machine — anything not
+# repeated here still comes from the base application.yml.
+# spring:
+#   datasource:
+#     url: jdbc:postgresql://localhost:5432/mini_trello
+#     username: postgres
+#     password: postgres

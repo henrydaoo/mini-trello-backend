@@ -1,7 +1,12 @@
 package com.minitrello.controller;
 
-import com.minitrello.dto.*;
+import com.minitrello.dto.TaskAssigneeRequest;
+import com.minitrello.dto.TaskCreateRequest;
+import com.minitrello.dto.TaskMoveRequest;
+import com.minitrello.dto.TaskResponse;
+import com.minitrello.dto.TaskUpdateRequest;
 import com.minitrello.service.TaskService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +17,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Task")
 public class TaskController {
+
   private final TaskService taskService;
 
   @GetMapping("/api/lists/{listId}/tasks")

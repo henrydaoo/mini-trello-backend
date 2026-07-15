@@ -4,7 +4,11 @@ import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "boards")
@@ -14,6 +18,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class Board {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -28,7 +33,7 @@ public class Board {
   @JoinColumn(name = "owner_id", nullable = false)
   private User owner;
 
-  @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
   @Builder.Default
   private List<BoardMember> members = new ArrayList<>();
 

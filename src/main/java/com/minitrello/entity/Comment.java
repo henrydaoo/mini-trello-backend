@@ -9,33 +9,34 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(
-    name = "board_members",
-    uniqueConstraints = {@UniqueConstraint(columnNames = {"board_id", "user_id"})})
+@Table(name = "comments")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BoardMember {
+public class Comment {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "board_id", nullable = false)
-  private Board board;
+  @JoinColumn(name = "task_id", nullable = false)
+  private Task task;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = false)
   private User user;
 
-  @Column(name = "joined_at", nullable = false, updatable = false)
-  private Instant joinedAt;
+  @Column(nullable = false, length = 2000)
+  private String content;
+
+  @Column(name = "created_at", nullable = false, updatable = false)
+  private Instant createdAt;
 
   @PrePersist
   void onCreate() {
-    this.joinedAt = Instant.now();
+    this.createdAt = Instant.now();
   }
 }

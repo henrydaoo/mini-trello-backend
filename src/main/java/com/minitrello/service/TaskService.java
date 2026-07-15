@@ -2,6 +2,7 @@ package com.minitrello.service;
 
 import com.minitrello.dto.*;
 import com.minitrello.entity.*;
+import com.minitrello.event.TaskAssignedEvent;
 import com.minitrello.exception.ForbiddenOperationException;
 import com.minitrello.exception.TaskListNotFoundException;
 import com.minitrello.exception.TaskNotFoundException;
@@ -11,6 +12,7 @@ import com.minitrello.repository.TaskRepository;
 import com.minitrello.repository.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,7 @@ public class TaskService {
   private final TaskListRepository taskListRepository;
   private final UserRepository userRepository;
   private final BoardAccessService boardAccessService;
+  private final ApplicationEventPublisher eventPublisher;
 
   @Transactional(readOnly = true)
   public List<TaskResponse> getTasksForList(String username, Long listId, Long assigneeIdFilter) {
@@ -100,6 +103,9 @@ public class TaskService {
     } else {
       User assignee = resolveAssignee(task.getList().getBoard(), request.getAssigneeId());
       task.setAssignee(assignee);
+      Task savedTask = taskRepository.save(task);
+      eventPublisher.publishEvent(new TaskAssignedEvent(savedTask.getId(), assignee.getId()));
+      return toResponse(savedTask);
     }
 
     return toResponse(taskRepository.save(task));

@@ -7,7 +7,9 @@ import com.minitrello.dto.BoardResponse;
 import com.minitrello.entity.Board;
 import com.minitrello.entity.BoardMember;
 import com.minitrello.entity.User;
-import com.minitrello.exception.*;
+import com.minitrello.exception.BoardMemberNotFoundException;
+import com.minitrello.exception.MemberAlreadyExistsException;
+import com.minitrello.exception.UserNotFoundException;
 import com.minitrello.repository.BoardMemberRepository;
 import com.minitrello.repository.BoardRepository;
 import com.minitrello.repository.UserRepository;
@@ -20,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional
 public class BoardService {
+
   private final BoardRepository boardRepository;
   private final BoardMemberRepository boardMemberRepository;
   private final UserRepository userRepository;
