@@ -36,7 +36,7 @@ public class TaskAssignedEventListener {
       }
 
       NotificationStrategy strategy =
-          notificationFactory.getStratery(assignee.getNotificationPreference());
+          notificationFactory.getStrategy(assignee.getNotificationPreference());
       strategy.send(assignee, task);
     } catch (Exception e) {
       log.error(
