@@ -29,6 +29,7 @@ target/
 .env
 *.log
 
-### Node (frontend, added later) ###
+application-local.yml
+
 node_modules/
 dist/

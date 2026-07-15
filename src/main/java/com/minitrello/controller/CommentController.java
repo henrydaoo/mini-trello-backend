@@ -3,6 +3,7 @@ package com.minitrello.controller;
 import com.minitrello.dto.CommentRequest;
 import com.minitrello.dto.CommentResponse;
 import com.minitrello.service.CommentService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Comment")
 public class CommentController {
+
   private final CommentService commentService;
 
   @GetMapping("/api/tasks/{taskId}/comments")
